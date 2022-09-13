@@ -30,28 +30,30 @@
 -- S2.1. Vier-daagse cursussen
 --
 -- Geef code en omschrijving van alle cursussen die precies vier dagen duren.
--- DROP VIEW IF EXISTS s2_1; CREATE OR REPLACE VIEW s2_1 AS                                                     -- [TEST]
+DROP VIEW IF EXISTS s2_1; CREATE OR REPLACE VIEW s2_1 AS                                                     -- [TEST]
+SELECT code, omschrijving FROM cursussen WHERE lengte = 4;
 
 
 -- S2.2. Medewerkersoverzicht
 --
 -- Geef alle informatie van alle medewerkers, gesorteerd op functie,
 -- en per functie op leeftijd (van jong naar oud).
--- DROP VIEW IF EXISTS s2_2; CREATE OR REPLACE VIEW s2_2 AS                                                     -- [TEST]
-
+--DROP VIEW IF EXISTS s2_2; CREATE OR REPLACE VIEW s2_2 AS                                                     -- [TEST]
+SELECT * FROM medewerkers ORDER BY functie, gbdatum DESC ;
 
 -- S2.3. Door het land
 --
 -- Welke cursussen zijn in Utrecht en/of in Maastricht uitgevoerd? Geef
 -- code en begindatum.
--- DROP VIEW IF EXISTS s2_3; CREATE OR REPLACE VIEW s2_3 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s2_3; CREATE OR REPLACE VIEW s2_3 AS                                                     -- [TEST]
+SELECT cursus, begindatum FROM uitvoeringen
+WHERE locatie = 'UTRECHT' OR locatie = 'MAASTRICHT';
 
 -- S2.4. Namen
 --
 -- Geef de naam en voorletters van alle medewerkers, behalve van R. Jansen.
--- DROP VIEW IF EXISTS s2_4; CREATE OR REPLACE VIEW s2_4 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s2_4; CREATE OR REPLACE VIEW s2_4 AS                                                     -- [TEST]
+SELECT naam, voorl FROM medewerkers WHERE (naam != 'JANSEN' OR voorl != 'R');
 
 -- S2.5. Nieuwe SQL-cursus
 --

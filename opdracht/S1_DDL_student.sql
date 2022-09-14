@@ -71,19 +71,26 @@ WHERE mnr = 8000;
 
 
 
---alter table afdelingen alter column anr type numeric(5,0);
+ALTER TABLE afdelingen ALTER COLUMN anr TYPE NUMERIC(3,0);
 
---CREATE SEQUENCE generate_anr
---INCREMENT 10
---MINVALUE 60;
+CREATE SEQUENCE IF NOT EXISTS generate_anr
+INCREMENT 10
+START 60;
 
---UPDATE afdelingen SET anr = nextval('generate_anr');
+INSERT INTO afdelingen (anr, naam, locatie)
+VALUES (nextval('generate_anr'), 'AFDELING1', 'UTRECHT');
 
---INSERT INTO afdelingen ( naam, locatie)
---VALUES ('ONDERZOEK', 'UTRECHT');
+INSERT INTO afdelingen (anr, naam, locatie)
+VALUES (nextval('generate_anr'), 'AFDELING2', 'UTRECHT');
 
+INSERT INTO afdelingen (anr, naam, locatie)
+VALUES (nextval('generate_anr'), 'AFDELING3', 'UTRECHT');
 
+INSERT INTO afdelingen (anr, naam, locatie)
+VALUES (nextval('generate_anr'), 'AFDELING4', 'UTRECHT');
 
+INSERT INTO afdelingen (anr, naam, locatie)
+VALUES (nextval('generate_anr'), 'AFDELING5', 'UTRECHT');
 
 -- S1.4. Adressen
 --
@@ -99,16 +106,16 @@ WHERE mnr = 8000;
 --    med_mnr       FK, verplicht
 
 CREATE TABLE IF NOT EXISTS adressen (
-                                        postcode varchar PRIMARY KEY CHECK(LENGTH(postcode) = 6),
-                                        huisnummer int NOT NULL,
-                                        ingangsdatum date NOT NUll,
-                                        einddatum date CHECK (einddatum > ingangsdatum),
-                                        telefoon varchar UNIQUE CHECK(LENGTH(telefoon) = 10),
+    postcode varchar PRIMARY KEY CHECK(LENGTH(postcode) = 6),
+    huisnummer int NOT NULL,
+    ingangsdatum date NOT NUll,
+    einddatum date CHECK (einddatum > ingangsdatum),
+    telefoon varchar UNIQUE CHECK(LENGTH(telefoon) = 10),
 
-                                        med_mnr int NOT NULL,
-                                        CONSTRAINT med_mnr
-                                            FOREIGN KEY(med_mnr)
-                                                REFERENCES medewerkers(mnr)
+    med_mnr int NOT NULL,
+    CONSTRAINT med_mnr
+    FOREIGN KEY(med_mnr)
+    REFERENCES medewerkers(mnr)
 );
 
 INSERT INTO adressen
@@ -149,6 +156,7 @@ ORDER BY resultaat;
 
 
 -- Draai alle wijzigingen terug om conflicten in komende opdrachten te voorkomen.
+DROP SEQUENCE IF EXISTS generate_anr;
 DROP TABLE IF EXISTS adressen;
 UPDATE medewerkers SET afd = NULL WHERE mnr < 7369 OR mnr > 7934;
 UPDATE afdelingen SET hoofd = NULL WHERE anr > 40;

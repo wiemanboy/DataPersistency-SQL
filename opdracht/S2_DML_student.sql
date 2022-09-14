@@ -105,20 +105,19 @@ ON CONFLICT DO NOTHING;                                                         
 -- De medewerkers van de afdeling VERKOOP krijgen een salarisverhoging
 -- van 5.5%, behalve de manager van de afdeling, deze krijgt namelijk meer: 7%.
 -- Voer deze verhogingen door.
-UPDATE medewerkers SET maandsal = maandsal * 1.055 WHERE afd = 30 AND functie != 'MANAGER';
-UPDATE medewerkers SET maandsal = maandsal * 1.07 WHERE afd = 30 AND functie != 'MANAGER';
+UPDATE medewerkers SET maandsal = maandsal * 1.055 WHERE afd = (SELECT anr FROM afdelingen WHERE naam = 'VERKOOP') AND functie != 'MANAGER';
+UPDATE medewerkers SET maandsal = maandsal * 1.07 WHERE afd = (SELECT anr FROM afdelingen WHERE naam = 'VERKOOP') AND functie = 'MANAGER';
 
 -- S2.10. Concurrent
 --
 -- Martens heeft als verkoper succes en wordt door de concurrent
 -- weggekocht. Verwijder zijn gegevens.
-
-DELETE FROM medewerkers WHERE mnr = 7654;
+DELETE FROM medewerkers WHERE naam = 'MARTENS' AND functie = 'VERKOPER';
 
 -- Zijn collega Alders heeft ook plannen om te vertrekken. Verwijder ook zijn gegevens.
 -- Waarom lukt dit (niet)?
 
---DELETE FROM medewerkers WHERE mnr = 7499;
+--DELETE FROM medewerkers WHERE naam = 'ALDERS' AND functie = 'VERKOPER';
 -- Alders is ingeschreven voor een cursus en de foreign key van inschrijvingen mag niet NULL zijn.
 
 -- S2.11. Nieuwe afdeling
@@ -135,10 +134,6 @@ VALUES (50, 'FINANCIEN', 'LEERDAM', 8002);                                      
 
 UPDATE medewerkers SET afd = 50
 WHERE mnr = 8002;
-
-SELECT * FROM medewerkers;
-SELECT * FROM afdelingen;
-
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
 -- Met onderstaande query kun je je code testen. Zie bovenaan dit bestand

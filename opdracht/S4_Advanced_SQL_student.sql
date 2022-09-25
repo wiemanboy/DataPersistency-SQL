@@ -74,16 +74,16 @@ GROUP BY cursus;
 -- jongste medewerker (`verschil`) en bepaal de gemiddelde leeftijd van
 -- de medewerkers (`gemiddeld`).
 -- Je mag hierbij aannemen dat elk jaar 365 dagen heeft.
--- DROP VIEW IF EXISTS s4_6; CREATE OR REPLACE VIEW s4_6 AS                                                     -- [TEST]
-SELECT (max(gbdatum) - min(gbdatum)) / 365 AS verschil FROM medewerkers;
+DROP VIEW IF EXISTS s4_6; CREATE OR REPLACE VIEW s4_6 AS                                                     -- [TEST]
+SELECT (max(gbdatum) - min(gbdatum)) / 365 AS verschil, avg((date(now()) - gbdatum) / 365) AS gemiddeld FROM medewerkers;
 
 -- S4.7. 
 -- Geef van het hele bedrijf een overzicht van het aantal medewerkers dat
 -- er werkt (`aantal_medewerkers`), de gemiddelde commissie die ze
 -- krijgen (`commissie_medewerkers`), en hoeveel dat gemiddeld
 -- per verkoper is (`commissie_verkopers`).
--- DROP VIEW IF EXISTS s4_7; CREATE OR REPLACE VIEW s4_7 AS                                                     -- [TEST]
-SELECT count(*) AS aantal_medewerkers, avg(comm) AS aantal_medewerkers FROM medewerkers;
+DROP VIEW IF EXISTS s4_7; CREATE OR REPLACE VIEW s4_7 AS                                                     -- [TEST]
+SELECT count(*) AS aantal_medewerkers, avg(COALESCE(comm, 0)) AS commissie_medewerkers, avg(comm) AS commissie_verkopers FROM medewerkers;
 
 -- -------------------------[ HU TESTRAAMWERK ]--------------------------------
 -- Met onderstaande query kun je je code testen. Zie bovenaan dit bestand

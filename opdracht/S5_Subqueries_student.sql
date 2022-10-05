@@ -99,8 +99,13 @@ FROM uitvoeringen u
 -- S5.7.
 -- Geef voorletter(s) en achternaam van alle trainers die ooit tijdens een
 -- algemene ('ALG') cursus hun eigen chef als cursist hebben gehad.
--- DROP VIEW IF EXISTS s5_7; CREATE OR REPLACE VIEW s5_7 AS                                                     -- [TEST]
-
+DROP VIEW IF EXISTS s5_7; CREATE OR REPLACE VIEW s5_7 AS                                                     -- [TEST]
+SELECT voorl, naam FROM medewerkers m
+WHERE functie = 'TRAINER' AND mnr IN (
+    SELECT docent FROM inschrijvingen i
+    JOIN uitvoeringen u on i.cursus = u.cursus and i.begindatum = u.begindatum
+    WHERE u.cursus IN (SELECT code FROM cursussen WHERE type = 'ALG') AND i.cursist = m.chef
+);
 
 -- S5.8.
 -- Geef de naam van de medewerkers die nog nooit een cursus hebben gegeven.

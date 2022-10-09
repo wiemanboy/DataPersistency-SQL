@@ -56,7 +56,15 @@
 -- Maak om dit te bereiken een subquery in je WHERE clause.
 -- Sorteer het resultaat van de hele geheel op levertijd (desc) en verkoper.
 -- 1. Maak hieronder deze query (als je het goed doet zouden er 377 rijen uit moeten komen, en het kan best even duren...)
+SELECT o.order_id, o.order_date, salesperson_person_id AS verkoper, expected_delivery_date - order_date AS vertraging, picked_quantity   FROM orders o
+JOIN order_lines ol on o.order_id = ol.order_id
+WHERE (SELECT AVG(o2.expected_delivery_date - o2.order_date) FROM orders o2
+    WHERE o2.salesperson_person_id = o.salesperson_person_id)
+    > 1.45
+    AND ol.picked_quantity > 250
+    ORDER BY vertraging DESC, salesperson_person_id;
 
+-- Waarom is deze traag?
 
 -- S7.3.B
 --
